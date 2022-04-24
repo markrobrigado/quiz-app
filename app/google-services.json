@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "227411393792",
-    "project_id": "reviewer-app-59de5",
-    "storage_bucket": "reviewer-app-59de5.appspot.com"
+    "project_id": "quiz-app-59de5",
+    "storage_bucket": "quiz-app-59de5.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:227411393792:android:bdf406f51956dc299d87e5",
         "android_client_info": {
-          "package_name": "com.example.reviewer_app"
+          "package_name": "com.example.quizapp"
         }
       },
       "oauth_client": [
