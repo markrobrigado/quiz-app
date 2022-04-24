@@ -1,4 +1,4 @@
-package com.example.reviewer_app.fragment;
+package com.example.quizapp.view;
 
 import android.os.Bundle;
 
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.reviewer_app.R;
+import com.example.quizapp.R;
 
 /**
  * A simple {@link Fragment} subclass.

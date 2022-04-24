@@ -1,4 +1,4 @@
-package com.example.reviewer_app.fragment;
+package com.example.quizapp.view;
 
 import android.os.Bundle;
 
@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.reviewer_app.R;
+import com.example.quizapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -26,9 +26,6 @@ import com.google.firebase.auth.FirebaseUser;
  * A simple {@link Fragment} subclass.
  */
 public class StartFragment extends Fragment {
-
-    private CircularProgressIndicator startProgress;
-    private MaterialTextView startFeedbackText;
 
     private FirebaseAuth firebaseAuth;
     private NavController navController;
@@ -52,11 +49,6 @@ public class StartFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
         navController = Navigation.findNavController(view);
-
-        startProgress = view.findViewById(R.id.start_progress);
-        startFeedbackText = view.findViewById(R.id.start_feedback);
-
-        startFeedbackText.setText("Checking account credentials...");
     }
 
     @Override
@@ -67,16 +59,12 @@ public class StartFragment extends Fragment {
 
         // If no account
         if(currentUser == null) {
-
-            startFeedbackText.setText("Creating account...");
-
             // Create account anonymously
             firebaseAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()) {
                         // Navigate to Homepage
-                        startFeedbackText.setText("Account Created...");
                         navController.navigate(R.id.action_startFragment_to_listFragment);
                     } else {
                         Log.d(START_TAG, "Start Log: " + task.getException());
@@ -85,7 +73,6 @@ public class StartFragment extends Fragment {
             });
         } else {
             // Navigate to Homepage
-            startFeedbackText.setText("Logged In");
             navController.navigate(R.id.action_startFragment_to_listFragment);
         }
     }

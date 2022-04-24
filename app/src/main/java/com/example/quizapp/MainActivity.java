@@ -1,4 +1,4 @@
-package com.example.reviewer_app;
+package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
