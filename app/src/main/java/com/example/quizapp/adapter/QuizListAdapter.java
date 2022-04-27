@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.quizapp.R;
 import com.example.quizapp.model.QuizModel;
 import com.google.android.material.button.MaterialButton;
@@ -35,6 +36,17 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     @Override
     public void onBindViewHolder(@NonNull QuizViewHolder holder, int position) {
         holder.listTitle.setText(quizModels.get(position).getName());
+
+        String imageUrl = quizModels.get(position).getImage();
+
+        Glide.with(holder.itemView.getContext())
+                .load(imageUrl)
+                .centerCrop()
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(holder.listImage);
+
+        holder.listDesc.setText(quizModels.get(position).getDesc());
+        holder.listDiff.setText(quizModels.get(position).getDifficulty());
     }
 
     @Override
