@@ -56,7 +56,7 @@ public class StartFragment extends Fragment {
         super.onStart();
 
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-
+        
         // If no account
         if(currentUser == null) {
             // Create account anonymously
