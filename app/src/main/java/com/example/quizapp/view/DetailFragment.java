@@ -2,59 +2,44 @@ package com.example.quizapp.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.example.quizapp.R;
+import com.example.quizapp.model.QuizModel;
+import com.example.quizapp.viewmodel.QuizListViewModel;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DetailFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private NavController navController;
+    private QuizListViewModel quizListViewModel;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ShapeableImageView detailImage;
+    private MaterialTextView detailTitle, detailDesc, detailDiff, detailQuestion, detailScore;
+    private MaterialButton detailBtn;
+    int position;
 
     public DetailFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DetailFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DetailFragment newInstance(String param1, String param2) {
-        DetailFragment fragment = new DetailFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -62,5 +47,49 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        navController = Navigation.findNavController(view);
+
+        position = DetailFragmentArgs.fromBundle(getArguments()).getPosition();
+
+        detailImage = view.findViewById(R.id.detail_image);
+        detailTitle = view.findViewById(R.id.detail_title);
+        detailDesc = view.findViewById(R.id.detail_desc);
+        detailDiff = view.findViewById(R.id.detail_diff_text);
+        detailQuestion = view.findViewById(R.id.detail_questions_text);
+        detailBtn = view.findViewById(R.id.detail_start_btn);
+
+        quizListViewModel = new ViewModelProvider(getActivity()).get(QuizListViewModel.class);
+        quizListViewModel.getQuizListModelData().observe(getViewLifecycleOwner(), new Observer<List<QuizModel>>() {
+            @Override
+            public void onChanged(List<QuizModel> quizModels) {
+                detailTitle.setText(quizModels.get(position).getName());
+
+                String imageUrl = quizModels.get(position).getImage();
+                Glide.with(view.getContext())
+                        .load(imageUrl)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .into(detailImage);
+
+                detailDesc.setText(quizModels.get(position).getDesc());
+                detailDiff.setText(quizModels.get(position).getDifficulty());
+                detailQuestion.setText(String.valueOf(quizModels.get(position).getQuestions()));
+            }
+        });
+
+        detailBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        DetailFragmentDirections.ActionDetailFragmentToQuizFragment action = DetailFragmentDirections.actionDetailFragmentToQuizFragment();
+        action.setPosition(position);
+        navController.navigate(R.id.action_detailFragment_to_quizFragment);
     }
 }
